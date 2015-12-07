@@ -1,0 +1,65 @@
+//Arduino SbS
+//Create a random pattern of blinking LED
+//Using a seven segment display
+
+//Pin connected to latch pin (ST_CP) of 74HC595
+const int latchPin = 9;
+//Pin connected to clock pin (SH_CP) of 74HC595
+const int clockPin = 10;
+////Pin connected to Data in (DS) of 74HC595
+const int dataPin = 8;
+
+const byte CHAR_COUNT = 17;
+
+const byte symbols[CHAR_COUNT] = {
+  B00010001, // 0
+  B11111001, // 1
+  B00100011, // 2
+  B01100001, // 3
+  B11001001, // 4
+  B01000101, // 5
+  B00000101, // 6
+  B11110001, // 7
+  B00000001, // 8
+  B01000001, // 9
+  B10000001, // A,10
+  B00001101, // b,11
+  B00010111, // C,12
+  B00101001, // d,13
+  B00000111, // E,14
+  B10000111, // F,16
+  B10000111  // G,16
+};
+
+void setup() {
+  //set pins to output because they are addressed in the main loop
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+
+  writeLeds(symbols[16]);
+}
+
+void loop() {
+  void writeLeds();
+
+
+}
+
+
+
+void writeLeds(byte pattern)
+{
+  // turn off the output so the pins don't light up
+  // while you're shifting bits:
+  digitalWrite(latchPin, LOW);
+  // turn on the next highest bit in bitsToSend:
+  Serial.println(pattern, BIN);
+
+  // shift the bits out:
+  shiftOut(dataPin, clockPin, MSBFIRST, pattern);
+
+  // turn on the output so the LEDs can light up:
+  digitalWrite(latchPin, HIGH);
+}
+
